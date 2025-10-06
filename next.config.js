@@ -10,8 +10,8 @@ const nextConfig = {
     ],
   },
   transpilePackages: ['mapbox-gl'],
-  // Optimización para Vercel
-  output: 'standalone',
+  // Deshabilitado standalone por conflicto con dynamic routes
+  // output: 'standalone',
   poweredByHeader: false,
   reactStrictMode: true,
   eslint: {
