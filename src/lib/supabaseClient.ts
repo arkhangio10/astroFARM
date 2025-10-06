@@ -1,23 +1,32 @@
 // Supabase client configuration
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-// Default values for build time (will be replaced with real values from Vercel at runtime)
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDUxOTI4MDAsImV4cCI6MTk2MDc2ODgwMH0.placeholder';
+// Get environment variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-  }
-});
-
-// Helper to check if we have real credentials (not placeholders)
+// Helper to check if we have real credentials
 export function isSupabaseConfigured(): boolean {
-  return supabaseUrl !== 'https://placeholder.supabase.co' && 
-         supabaseAnonKey !== 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDUxOTI4MDAsImV4cCI6MTk2MDc2ODgwMH0.placeholder';
+  return Boolean(supabaseUrl && supabaseAnonKey);
 }
+
+// Create a null client for build time
+const createNullClient = (): any => {
+  return new Proxy({}, {
+    get: () => () => Promise.resolve({ data: null, error: new Error('Supabase not configured') })
+  });
+};
+
+// Only create real client if credentials are available
+export const supabase: SupabaseClient = isSupabaseConfigured() && supabaseUrl && supabaseAnonKey
+  ? createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+      }
+    })
+  : createNullClient();
 
 // Database types
 export interface Database {
