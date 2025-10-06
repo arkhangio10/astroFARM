@@ -65,7 +65,7 @@ export default function LocationSelection({
             Select Your Location
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Choose where you&apos;ll grow your crops. Each location has 
+            Choose where you'll grow your crops. Each location has 
             unique climate conditions and challenges that will affect your strategy.
           </p>
         </div>
@@ -249,7 +249,7 @@ export default function LocationSelection({
             </h3>
             <p className="text-green-700 text-sm max-w-3xl mx-auto">
               Each location has unique climate conditions that affect crop growth. 
-              By choosing different locations, you&apos;ll learn about sustainable agriculture in diverse 
+              By choosing different locations, you'll learn about sustainable agriculture in diverse 
               environments and how NASA data can help you make better agricultural decisions.
             </p>
           </div>

@@ -5,30 +5,7 @@ import { getNasaClient } from '@/lib/nasaClient';
 
 export const dynamic = 'force-dynamic';
 
-// Check if NASA is configured
-function isNASAConfigured() {
-  const token = process.env.NASA_EARTHDATA_TOKEN;
-  const username = process.env.NASA_EARTHDATA_USERNAME;
-  const password = process.env.NASA_EARTHDATA_PASSWORD;
-  return Boolean(token || (username && password));
-}
-
 export async function GET(request: NextRequest) {
-  // During build time, return mock data
-  if (!isNASAConfigured()) {
-    return NextResponse.json({
-      success: true,
-      message: 'NASA service not configured - returning mock data',
-      availableNDVI: { mock: true },
-      broadResults: [],
-      recentResults: [],
-      productResults: [],
-      actualGranule: null
-    }, {
-      headers: { 'X-Build-Time': 'true' }
-    });
-  }
-
   try {
     console.log('Starting NASA Historical Data Test (Broader Filters)...');
     

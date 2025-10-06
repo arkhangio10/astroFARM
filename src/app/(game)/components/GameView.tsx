@@ -25,9 +25,10 @@ import { Location } from '@/types/game';
 import { getLocationById } from '@/lib/locations';
 
 interface PlayerData {
-  playerName: string;
-  learningGoal: string;
-  selectedCrop: string;
+  name: string;
+  experience: 'beginner' | 'intermediate' | 'advanced';
+  interests: string[];
+  goals: string;
 }
 
 export default function GameView() {
@@ -165,7 +166,7 @@ export default function GameView() {
     return (
       <LocationSelection
         onLocationSelect={handleLocationSelect}
-        playerLevel={1}
+        playerLevel={playerData?.experience === 'beginner' ? 1 : playerData?.experience === 'intermediate' ? 2 : 3}
         completedLevels={[]}
       />
     );

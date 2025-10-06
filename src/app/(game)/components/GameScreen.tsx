@@ -35,7 +35,7 @@ interface Resources {
   pesticide: number;
 }
 
-export interface CropState {
+interface CropState {
   growth: number; // 0-100%
   health: number; // 0-100%
   moisture: number; // 0-100%

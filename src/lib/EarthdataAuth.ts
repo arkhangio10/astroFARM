@@ -11,23 +11,9 @@ export class EarthdataAuth {
   private expiresAt?: number; // epoch ms
 
   constructor(username?: string, password?: string, initialToken?: string) {
-    // Don't throw errors during build time
-    if (typeof window === 'undefined' && process.env.NODE_ENV === 'production') {
-      // During build, use placeholders
-      this.username = username || 'placeholder-user';
-      this.password = password || 'placeholder-pass';
-      this.accessToken = initialToken || 'placeholder-token';
-    } else {
-      this.username = username;
-      this.password = password;
-      this.accessToken = initialToken;
-    }
-  }
-
-  isConfigured(): boolean {
-    return this.username !== 'placeholder-user' && 
-           this.password !== 'placeholder-pass' &&
-           this.accessToken !== 'placeholder-token';
+    this.username = username;
+    this.password = password;
+    this.accessToken = initialToken;
   }
 
   /**

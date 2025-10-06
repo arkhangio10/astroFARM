@@ -24,7 +24,6 @@ interface LeafletLayerGroup {
   addLayer(layer: any): void;
   removeLayer(layer: any): void;
   clearLayers(): void;
-  addTo(map: LeafletMap): LeafletLayerGroup;
 }
 
 interface LeafletMarker {

@@ -510,7 +510,7 @@ export default function FarmRoom() {
                 <MapPin className="w-16 h-16 text-white/60" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-3">
-                You don&apos;t have any farms yet
+                You don't have any farms yet
               </h3>
               <p className="text-white/70 mb-8 text-lg">
                 Create your first farm to start your agricultural adventure

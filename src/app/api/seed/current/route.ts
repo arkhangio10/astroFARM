@@ -1,29 +1,12 @@
 // API route for current seed
 
 import { NextResponse } from 'next/server';
+import { supabase } from '@/lib/supabaseClient';
 import { CurrentSeedResponse } from '@/types/api';
-
-// Check if Supabase is configured without importing the client
-function isSupabaseConfigured(): boolean {
-  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
-}
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  // During build time, return mock response
-  if (!isSupabaseConfigured()) {
-    return NextResponse.json({
-      error: 'Database not configured'
-    }, {
-      status: 503,
-      headers: { 'X-Build-Time': 'true' }
-    });
-  }
-
-  // Lazy import supabase only when needed
-  const { supabase } = await import('@/lib/supabaseClient');
-
   try {
     // Get the current weekly seed
     // For MVP, we'll use a hardcoded seed

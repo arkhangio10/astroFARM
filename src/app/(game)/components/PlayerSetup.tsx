@@ -5,9 +5,9 @@ import { useRouter } from 'next/navigation';
 import { Carrot, Leaf, Flower2, Wheat } from 'lucide-react';
 
 interface PlayerSetupProps {
-  farm?: any;
+  farm: any;
   onComplete: (playerData: PlayerData) => void;
-  onClose?: () => void;
+  onClose: () => void;
 }
 
 interface PlayerData {
@@ -56,11 +56,6 @@ export default function PlayerSetup({ farm, onComplete, onClose }: PlayerSetupPr
 
   // Obtener cultivos según la región
   const getCropsForRegion = () => {
-    // Validar que farm existe antes de acceder a sus propiedades
-    if (!farm) {
-      return CROPS_BY_REGION['default'];
-    }
-    
     // Buscar si la ubicación contiene "Central Valley"
     if (farm.location && farm.location.includes('Central Valley')) {
       return CROPS_BY_REGION['Central Valley'];
@@ -142,7 +137,7 @@ export default function PlayerSetup({ farm, onComplete, onClose }: PlayerSetupPr
                 <div className="space-y-6">
                   <div className="text-center">
                     <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                      What&apos;s your name?
+                      What's your name?
                     </h3>
                     <p className="text-gray-600">
                       Enter your name to personalize your experience

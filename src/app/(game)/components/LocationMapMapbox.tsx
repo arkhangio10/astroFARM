@@ -168,61 +168,57 @@ export default function LocationMapMapbox({ onLocationSelect, onClose, farmName 
       setLoadingProgress(60);
 
       // Agregar controles básicos
-      if (map.current) {
-        map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
-      }
+      map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
       setLoadingProgress(80);
 
       // Esperar a que el mapa esté listo
-      if (map.current) {
-        map.current.on('load', () => {
-          console.log('✅ Mapbox map loaded successfully');
-          setLoadingProgress(90);
+      map.current.on('load', () => {
+        console.log('✅ Mapbox map loaded successfully');
+        setLoadingProgress(90);
+        
+        // Crear marcadores para cada ubicación
+        LOCATIONS.forEach((location, index) => {
+          const markerEl = createCustomMarker(location, false);
           
-          // Crear marcadores para cada ubicación
-          LOCATIONS.forEach((location, index) => {
-            const markerEl = createCustomMarker(location, false);
-            
-            const marker = new mapboxgl.Marker({
-              element: markerEl,
-              anchor: 'center'
-            })
-              .setLngLat(location.coordinates)
-              .addTo(map.current!);
+          const marker = new mapboxgl.Marker({
+            element: markerEl,
+            anchor: 'center'
+          })
+            .setLngLat(location.coordinates)
+            .addTo(map.current!);
 
-            // Agregar evento de click
-            markerEl.addEventListener('click', () => {
-              handleLocationClick(location);
-            });
-
-            // Efecto hover
-            markerEl.addEventListener('mouseenter', () => {
-              if (!selectedLocation || selectedLocation.id !== location.id) {
-                markerEl.style.transform = 'scale(1.1)';
-              }
-            });
-
-            markerEl.addEventListener('mouseleave', () => {
-              if (!selectedLocation || selectedLocation.id !== location.id) {
-                markerEl.style.transform = 'scale(1)';
-              }
-            });
-
-            markers.current.push(marker);
+          // Agregar evento de click
+          markerEl.addEventListener('click', () => {
+            handleLocationClick(location);
           });
 
-          setMapLoaded(true);
-          setLoadingProgress(100);
-          console.log('🎯 Map initialization complete');
+          // Efecto hover
+          markerEl.addEventListener('mouseenter', () => {
+            if (!selectedLocation || selectedLocation.id !== location.id) {
+              markerEl.style.transform = 'scale(1.1)';
+            }
+          });
+
+          markerEl.addEventListener('mouseleave', () => {
+            if (!selectedLocation || selectedLocation.id !== location.id) {
+              markerEl.style.transform = 'scale(1)';
+            }
+          });
+
+          markers.current.push(marker);
         });
 
-        // Manejar errores del mapa
-        map.current.on('error', (e: any) => {
-          console.error('❌ Mapbox error:', e);
-          setError(`Error al cargar el mapa: ${e.error?.message || 'Error desconocido'}`);
-        });
-      }
+        setMapLoaded(true);
+        setLoadingProgress(100);
+        console.log('🎯 Map initialization complete');
+      });
+
+      // Manejar errores del mapa
+      map.current.on('error', (e) => {
+        console.error('❌ Mapbox error:', e);
+        setError(`Error al cargar el mapa: ${e.error?.message || 'Error desconocido'}`);
+      });
 
     } catch (error) {
       console.error('❌ Error initializing Mapbox:', error);
@@ -438,7 +434,7 @@ export default function LocationMapMapbox({ onLocationSelect, onClose, farmName 
                 Select Location for {farmName || 'New Farm'}
               </h2>
               <p className="text-gray-600">
-                Choose a location in California&apos;s Central Valley for your farm
+                Choose a location in California's Central Valley for your farm
               </p>
               <div className="mt-2 flex items-center gap-2">
                 <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">

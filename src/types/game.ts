@@ -110,7 +110,7 @@ export interface DatasetMeta {
 
 export interface TipRule {
   id: string;
-  when: (state: GameState, context?: any) => boolean;
+  when: (state: GameState) => boolean;
   message: (context: TipContext) => string;
   severity: 'info' | 'warning' | 'edu';
   cooldownTurns?: number;
