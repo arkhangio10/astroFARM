@@ -1,12 +1,19 @@
 // API route for leaderboards
 
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 import { LeaderboardRequest, LeaderboardResponse } from '@/types/api';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
+  // Check if Supabase is configured (returns empty array during build time)
+  if (!isSupabaseConfigured()) {
+    return NextResponse.json([], { 
+      headers: { 'X-Build-Time': 'true' } 
+    });
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const seed = searchParams.get('seed');
