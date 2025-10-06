@@ -20,6 +20,7 @@ interface LeafletControl {
 
 interface LeafletLayerGroup {
   addLayer(layer: any): void;
+  addTo(map: LeafletMap): LeafletLayerGroup;
 }
 
 interface LeafletMarker {
