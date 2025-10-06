@@ -1,10 +1,14 @@
 // API route for leaderboards
 
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 import { LeaderboardRequest, LeaderboardResponse } from '@/types/api';
 
 export const dynamic = 'force-dynamic';
+
+// Check if Supabase is configured without importing the client
+function isSupabaseConfigured(): boolean {
+  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+}
 
 export async function GET(request: NextRequest) {
   // Check if Supabase is configured (returns empty array during build time)
@@ -13,6 +17,9 @@ export async function GET(request: NextRequest) {
       headers: { 'X-Build-Time': 'true' } 
     });
   }
+
+  // Lazy import supabase only when needed
+  const { supabase } = await import('@/lib/supabaseClient');
 
   try {
     const { searchParams } = new URL(request.url);
