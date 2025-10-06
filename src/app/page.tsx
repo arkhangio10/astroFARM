@@ -4,7 +4,6 @@ import NextDynamic from 'next/dynamic';
 
 // Disable static generation for this page
 export const dynamic = 'force-dynamic';
-export const revalidate = 0;
 
 // Simple loading component
 const LoadingSpinner = () => (
