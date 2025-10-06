@@ -1,11 +1,15 @@
 // API route for submitting game runs
 
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabaseClient';
 import { simulate } from '@/lib/engine';
 import { calculateAchievements } from '@/lib/achievements';
 import { CreateRunRequest, CreateRunResponse } from '@/types/api';
 import { z } from 'zod';
+
+// Check if Supabase is configured without importing the client
+function isSupabaseConfigured(): boolean {
+  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+}
 
 // Validation schema
 const CreateRunSchema = z.object({
@@ -23,12 +27,26 @@ const CreateRunSchema = z.object({
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  // During build time, return mock response
+  if (!isSupabaseConfigured()) {
+    return NextResponse.json({
+      success: false,
+      error: 'Database not configured'
+    }, {
+      status: 503,
+      headers: { 'X-Build-Time': 'true' }
+    });
+  }
+
+  // Lazy import supabase only when needed
+  const { supabase } = await import('@/lib/supabaseClient');
+
   try {
     const body = await request.json();
     const validatedData = CreateRunSchema.parse(body);
     
     // Get or create player
-    const playerId = await getOrCreatePlayer();
+    const playerId = await getOrCreatePlayer(supabase);
     if (!playerId) {
       return NextResponse.json({ error: 'Failed to create player' }, { status: 500 });
     }
@@ -160,7 +178,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function getOrCreatePlayer(): Promise<string | null> {
+async function getOrCreatePlayer(supabase: any): Promise<string | null> {
   try {
     // For MVP, create anonymous player
     // In production, this would use proper authentication
