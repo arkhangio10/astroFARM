@@ -1,6 +1,11 @@
+
 'use client';
 
-import dynamic from 'next/dynamic';
+import NextDynamic from 'next/dynamic';
+
+// Disable static generation for this page
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 // Loading component inline
 const LoadingSpinner = () => (
@@ -13,7 +18,7 @@ const LoadingSpinner = () => (
 );
 
 // Dynamic import with no SSR
-const GameView = dynamic(() => import('./components/GameView'), {
+const GameView = NextDynamic(() => import('./components/GameView'), {
   ssr: false,
   loading: () => <LoadingSpinner />
 });
