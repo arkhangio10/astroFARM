@@ -28,20 +28,35 @@ const createNullClient = (): any => {
 
 // Lazy initialization - client is created only when first accessed
 let supabaseClient: any = null;
+let initializationAttempted = false;
 
 function getSupabaseClient() {
   if (supabaseClient) {
     return supabaseClient;
   }
 
+  // Only try to initialize once
+  if (initializationAttempted) {
+    return supabaseClient || createNullClient();
+  }
+
+  initializationAttempted = true;
+
+  // Check if we have valid credentials
   if (isSupabaseConfigured() && supabaseUrl && supabaseAnonKey) {
-    supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-      }
-    });
+    try {
+      supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+        }
+      });
+    } catch (error) {
+      console.warn('Failed to create Supabase client:', error);
+      supabaseClient = createNullClient();
+    }
   } else {
+    console.info('Supabase not configured, using null client');
     supabaseClient = createNullClient();
   }
 
