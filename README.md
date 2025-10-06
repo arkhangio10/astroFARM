@@ -2,6 +2,8 @@
 
 AstroFarm is an educational farming simulation game that uses real NASA satellite data to teach sustainable agriculture practices. Players make farming decisions based on actual environmental data from the Central Valley of California.
 
+🚀 **Live Demo**: Deploy in progress...
+
 ## 🌟 Features
 
 - **Real NASA Data**: Uses MODIS NDVI, SMAP soil moisture, and GPM precipitation data
