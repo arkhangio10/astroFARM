@@ -15,11 +15,28 @@ export function isSupabaseConfigured(): boolean {
 const createNullClient = (): any => {
   const handler: ProxyHandler<any> = {
     get: (target, prop) => {
-      // Return nested proxy for chained calls like supabase.auth.getUser()
-      if (prop === 'auth' || prop === 'from') {
-        return new Proxy({}, handler);
+      // Special properties that should return specific values
+      if (prop === 'auth') {
+        return new Proxy({
+          getUser: () => Promise.resolve({ data: { user: null }, error: null }),
+          getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+          signInWithPassword: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
+          signInAnonymously: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
+          signOut: () => Promise.resolve({ error: null }),
+          onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } })
+        }, {
+          get: (authTarget, authProp) => {
+            const value = (authTarget as any)[authProp];
+            return value || (() => Promise.resolve({ data: null, error: new Error('Supabase not configured') }));
+          }
+        });
       }
-      // Return a function that returns a promise with null data
+      
+      if (prop === 'from') {
+        return () => new Proxy({}, handler);
+      }
+      
+      // Return a function that returns a promise with null data for any other property
       return () => Promise.resolve({ data: null, error: new Error('Supabase not configured') });
     }
   };
