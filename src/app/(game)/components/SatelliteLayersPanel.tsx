@@ -74,7 +74,7 @@ export default function SatelliteLayersPanel({ onLayerChange }: SatelliteLayersP
 }
 
 function getLayerDescription(layerId: string): string {
-  const descriptions = {
+  const descriptions: Record<string, string> = {
     ndvi: 'Índice de vegetación normalizado. Muestra la salud de la vegetación (0-1)',
     temp: 'Temperatura de la superficie terrestre. Detecta heladas y estrés térmico',
     humedad: 'Humedad del suelo. Optimiza el riego y detecta sequía',
