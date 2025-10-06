@@ -4,7 +4,35 @@ import { nasaDataFetcher } from '@/lib/nasaDataFetcher';
 
 export const dynamic = 'force-dynamic';
 
+// Check if NASA is configured
+function isNASAConfigured() {
+  const token = process.env.NASA_EARTHDATA_TOKEN;
+  const username = process.env.NASA_EARTHDATA_USERNAME;
+  const password = process.env.NASA_EARTHDATA_PASSWORD;
+  return Boolean(token || (username && password));
+}
+
 export async function GET(request: NextRequest) {
+  // During build time, return mock data
+  if (!isNASAConfigured()) {
+    return NextResponse.json({
+      success: true,
+      data: {
+        ndvi: 0.65,
+        soilMoisture: 0.25,
+        temperature: 22,
+        precipitation: 0,
+        lastUpdate: new Date().toISOString(),
+        dataQuality: 'mock',
+        metadata: { source: 'build-time-mock' }
+      },
+      location: { lat: 36.7378, lon: -119.7871 },
+      requestedDate: new Date().toISOString()
+    }, {
+      headers: { 'X-Build-Time': 'true' }
+    });
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const lat = parseFloat(searchParams.get('lat') || '36.7378');
@@ -47,6 +75,26 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  // During build time, return mock data
+  if (!isNASAConfigured()) {
+    return NextResponse.json({
+      success: true,
+      data: [{
+        date: new Date().toISOString(),
+        ndvi: 0.65,
+        soilMoisture: 0.25,
+        temperature: 22,
+        precipitation: 0,
+        quality: 'mock'
+      }],
+      location: { lat: 36.7378, lon: -119.7871 },
+      period: { startDate: new Date().toISOString(), endDate: new Date().toISOString() },
+      count: 1
+    }, {
+      headers: { 'X-Build-Time': 'true' }
+    });
+  }
+
   try {
     const body = await request.json();
     const { lat, lon, startDate, endDate } = body;
