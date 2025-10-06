@@ -137,7 +137,7 @@ export default function PlayerSetup({ farm, onComplete, onClose }: PlayerSetupPr
                 <div className="space-y-6">
                   <div className="text-center">
                     <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                      What's your name?
+                      What&apos;s your name?
                     </h3>
                     <p className="text-gray-600">
                       Enter your name to personalize your experience

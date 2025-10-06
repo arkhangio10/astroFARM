@@ -250,7 +250,7 @@ export default function LocationMapFixed({ onLocationSelect, onClose, farmName }
                 Select Location for {farmName || 'New Farm'}
               </h2>
               <p className="text-gray-600">
-                Choose a location in California's Central Valley for your farm
+                Choose a location in California&apos;s Central Valley for your farm
               </p>
               <div className="mt-2 flex items-center gap-2">
                 <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">

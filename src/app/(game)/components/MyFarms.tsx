@@ -287,7 +287,7 @@ export default function MyFarms() {
             <MapPin className="w-12 h-12 text-gray-400" />
           </div>
           <h3 className="text-lg font-semibold text-gray-800 mb-2">
-            You don't have any farms yet
+            You don&apos;t have any farms yet
           </h3>
           <p className="text-gray-600 mb-6">
             Create your first farm to start your farming adventure

@@ -172,7 +172,7 @@ export default function SuperVegetableDisplay({
             {vegetable.abilities.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
                 <div className="text-4xl mb-2">🌱</div>
-                <p>This vegetable hasn't developed special abilities yet.</p>
+                <p>This vegetable hasn&apos;t developed special abilities yet.</p>
                 <p className="text-sm">Keep playing to unlock them!</p>
               </div>
             ) : (

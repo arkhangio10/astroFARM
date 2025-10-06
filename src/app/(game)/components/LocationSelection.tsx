@@ -65,7 +65,7 @@ export default function LocationSelection({
             Select Your Location
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Choose where you'll grow your crops. Each location has 
+            Choose where you&apos;ll grow your crops. Each location has 
             unique climate conditions and challenges that will affect your strategy.
           </p>
         </div>
