@@ -11,22 +11,36 @@ export function isSupabaseConfigured(): boolean {
   return Boolean(supabaseUrl && supabaseAnonKey);
 }
 
-// Create a null client for build time
+// Create a null client for build time - returns a proxy that handles all method calls
 const createNullClient = (): any => {
-  return new Proxy({}, {
-    get: () => () => Promise.resolve({ data: null, error: new Error('Supabase not configured') })
-  });
+  const handler: ProxyHandler<any> = {
+    get: (target, prop) => {
+      // Return nested proxy for chained calls like supabase.auth.getUser()
+      if (prop === 'auth' || prop === 'from') {
+        return new Proxy({}, handler);
+      }
+      // Return a function that returns a promise with null data
+      return () => Promise.resolve({ data: null, error: new Error('Supabase not configured') });
+    }
+  };
+  return new Proxy({}, handler);
 };
 
 // Only create real client if credentials are available
-export const supabase: SupabaseClient = isSupabaseConfigured() && supabaseUrl && supabaseAnonKey
-  ? createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-      }
-    })
-  : createNullClient();
+let supabaseClient: any;
+
+if (isSupabaseConfigured() && supabaseUrl && supabaseAnonKey) {
+  supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+    }
+  });
+} else {
+  supabaseClient = createNullClient();
+}
+
+export const supabase: SupabaseClient = supabaseClient;
 
 // Database types
 export interface Database {
