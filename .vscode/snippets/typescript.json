@@ -1,0 +1,59 @@
+{
+  "React Component": {
+    "prefix": "rfc",
+    "body": [
+      "import React from 'react';",
+      "",
+      "interface ${1:ComponentName}Props {",
+      "  $2",
+      "}",
+      "",
+      "export default function ${1:ComponentName}({ $3 }: ${1:ComponentName}Props) {",
+      "  return (",
+      "    <div>",
+      "      $4",
+      "    </div>",
+      "  );",
+      "}"
+    ],
+    "description": "React Functional Component with TypeScript"
+  },
+  "Next.js Page": {
+    "prefix": "npage",
+    "body": [
+      "import { Metadata } from 'next';",
+      "",
+      "export const metadata: Metadata = {",
+      "  title: '${1:Page Title}',",
+      "  description: '${2:Page Description}',",
+      "};",
+      "",
+      "export default function ${3:PageName}() {",
+      "  return (",
+      "    <div>",
+      "      $4",
+      "    </div>",
+      "  );",
+      "}"
+    ],
+    "description": "Next.js Page with Metadata"
+  },
+  "API Route": {
+    "prefix": "api",
+    "body": [
+      "import { NextRequest, NextResponse } from 'next/server';",
+      "",
+      "export async function ${1:GET}(request: NextRequest) {",
+      "  try {",
+      "    $2",
+      "    return NextResponse.json({ $3 });",
+      "  } catch (error) {",
+      "    console.error('Error:', error);",
+      "    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });",
+      "  }",
+      "}"
+    ],
+    "description": "Next.js API Route"
+  }
+}
+
