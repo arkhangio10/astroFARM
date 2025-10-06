@@ -40,9 +40,9 @@ export default function SimpleMapbox() {
         setLoading(false);
       });
 
-      map.current.on('error', (e) => {
+      map.current.on('error', (e: any) => {
         console.error('❌ Map error:', e);
-        setError(`Map error: ${e.error?.message || e.message || 'Unknown error'}`);
+        setError(`Map error: ${e.error?.message || 'Unknown error'}`);
         setLoading(false);
       });
 

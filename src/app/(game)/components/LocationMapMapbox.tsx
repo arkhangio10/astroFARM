@@ -218,7 +218,7 @@ export default function LocationMapMapbox({ onLocationSelect, onClose, farmName 
         });
 
         // Manejar errores del mapa
-        map.current.on('error', (e) => {
+        map.current.on('error', (e: any) => {
           console.error('❌ Mapbox error:', e);
           setError(`Error al cargar el mapa: ${e.error?.message || 'Error desconocido'}`);
         });
