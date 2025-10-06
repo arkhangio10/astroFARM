@@ -5,9 +5,9 @@ import { useRouter } from 'next/navigation';
 import { Carrot, Leaf, Flower2, Wheat } from 'lucide-react';
 
 interface PlayerSetupProps {
-  farm: any;
+  farm?: any;
   onComplete: (playerData: PlayerData) => void;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 interface PlayerData {
