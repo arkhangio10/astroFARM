@@ -33,11 +33,20 @@ export default function MapboxDiagnostic() {
       }
 
       // 3. Check if mapbox-gl is loaded
-      diagnostics.push({
-        name: 'Mapbox GL JS',
-        status: typeof mapboxgl !== 'undefined' ? 'success' : 'error',
-        message: typeof mapboxgl !== 'undefined' ? 'Library loaded' : 'Library not loaded'
-      });
+      try {
+        const mapboxgl = await import('mapbox-gl');
+        diagnostics.push({
+          name: 'Mapbox GL JS',
+          status: mapboxgl ? 'success' : 'error',
+          message: mapboxgl ? 'Library loaded' : 'Library not loaded'
+        });
+      } catch (error) {
+        diagnostics.push({
+          name: 'Mapbox GL JS',
+          status: 'error',
+          message: 'Failed to load library'
+        });
+      }
 
       // 4. Test API connectivity
       if (token) {
