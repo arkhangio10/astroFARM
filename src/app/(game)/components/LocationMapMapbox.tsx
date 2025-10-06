@@ -168,57 +168,61 @@ export default function LocationMapMapbox({ onLocationSelect, onClose, farmName 
       setLoadingProgress(60);
 
       // Agregar controles básicos
-      map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+      if (map.current) {
+        map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+      }
 
       setLoadingProgress(80);
 
       // Esperar a que el mapa esté listo
-      map.current.on('load', () => {
-        console.log('✅ Mapbox map loaded successfully');
-        setLoadingProgress(90);
-        
-        // Crear marcadores para cada ubicación
-        LOCATIONS.forEach((location, index) => {
-          const markerEl = createCustomMarker(location, false);
+      if (map.current) {
+        map.current.on('load', () => {
+          console.log('✅ Mapbox map loaded successfully');
+          setLoadingProgress(90);
           
-          const marker = new mapboxgl.Marker({
-            element: markerEl,
-            anchor: 'center'
-          })
-            .setLngLat(location.coordinates)
-            .addTo(map.current!);
+          // Crear marcadores para cada ubicación
+          LOCATIONS.forEach((location, index) => {
+            const markerEl = createCustomMarker(location, false);
+            
+            const marker = new mapboxgl.Marker({
+              element: markerEl,
+              anchor: 'center'
+            })
+              .setLngLat(location.coordinates)
+              .addTo(map.current!);
 
-          // Agregar evento de click
-          markerEl.addEventListener('click', () => {
-            handleLocationClick(location);
+            // Agregar evento de click
+            markerEl.addEventListener('click', () => {
+              handleLocationClick(location);
+            });
+
+            // Efecto hover
+            markerEl.addEventListener('mouseenter', () => {
+              if (!selectedLocation || selectedLocation.id !== location.id) {
+                markerEl.style.transform = 'scale(1.1)';
+              }
+            });
+
+            markerEl.addEventListener('mouseleave', () => {
+              if (!selectedLocation || selectedLocation.id !== location.id) {
+                markerEl.style.transform = 'scale(1)';
+              }
+            });
+
+            markers.current.push(marker);
           });
 
-          // Efecto hover
-          markerEl.addEventListener('mouseenter', () => {
-            if (!selectedLocation || selectedLocation.id !== location.id) {
-              markerEl.style.transform = 'scale(1.1)';
-            }
-          });
-
-          markerEl.addEventListener('mouseleave', () => {
-            if (!selectedLocation || selectedLocation.id !== location.id) {
-              markerEl.style.transform = 'scale(1)';
-            }
-          });
-
-          markers.current.push(marker);
+          setMapLoaded(true);
+          setLoadingProgress(100);
+          console.log('🎯 Map initialization complete');
         });
 
-        setMapLoaded(true);
-        setLoadingProgress(100);
-        console.log('🎯 Map initialization complete');
-      });
-
-      // Manejar errores del mapa
-      map.current.on('error', (e) => {
-        console.error('❌ Mapbox error:', e);
-        setError(`Error al cargar el mapa: ${e.error?.message || 'Error desconocido'}`);
-      });
+        // Manejar errores del mapa
+        map.current.on('error', (e) => {
+          console.error('❌ Mapbox error:', e);
+          setError(`Error al cargar el mapa: ${e.error?.message || 'Error desconocido'}`);
+        });
+      }
 
     } catch (error) {
       console.error('❌ Error initializing Mapbox:', error);
