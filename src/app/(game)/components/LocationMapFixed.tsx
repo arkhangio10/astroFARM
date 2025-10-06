@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { MapPin, CheckCircle, Info } from 'lucide-react';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 interface Location {
   id: string;
@@ -92,7 +93,6 @@ export default function LocationMapFixed({ onLocationSelect, onClose, farmName }
         
         // Importar Mapbox dinámicamente
         const mapboxgl = await import('mapbox-gl');
-        await import('mapbox-gl/dist/mapbox-gl.css');
         
         setLoadingProgress(40);
 
