@@ -100,7 +100,7 @@ const MISSION_TEMPLATES: Partial<DailyMission>[] = [
     },
     dataThresholds: {
       temperature: 2,
-      forecast: 'frost'
+      frostRisk: 0.7
     },
     expiresIn: 30,
     difficulty: 'medium'
