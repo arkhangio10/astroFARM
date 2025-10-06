@@ -56,6 +56,11 @@ export default function PlayerSetup({ farm, onComplete, onClose }: PlayerSetupPr
 
   // Obtener cultivos según la región
   const getCropsForRegion = () => {
+    // Validar que farm existe antes de acceder a sus propiedades
+    if (!farm) {
+      return CROPS_BY_REGION['default'];
+    }
+    
     // Buscar si la ubicación contiene "Central Valley"
     if (farm.location && farm.location.includes('Central Valley')) {
       return CROPS_BY_REGION['Central Valley'];
