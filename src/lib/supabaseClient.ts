@@ -26,21 +26,36 @@ const createNullClient = (): any => {
   return new Proxy({}, handler);
 };
 
-// Only create real client if credentials are available
-let supabaseClient: any;
+// Lazy initialization - client is created only when first accessed
+let supabaseClient: any = null;
 
-if (isSupabaseConfigured() && supabaseUrl && supabaseAnonKey) {
-  supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-    }
-  });
-} else {
-  supabaseClient = createNullClient();
+function getSupabaseClient() {
+  if (supabaseClient) {
+    return supabaseClient;
+  }
+
+  if (isSupabaseConfigured() && supabaseUrl && supabaseAnonKey) {
+    supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+      }
+    });
+  } else {
+    supabaseClient = createNullClient();
+  }
+
+  return supabaseClient;
 }
 
-export const supabase: SupabaseClient = supabaseClient;
+// Export a proxy that creates the client on first access
+export const supabase: SupabaseClient = new Proxy({} as SupabaseClient, {
+  get: (target, prop) => {
+    const client = getSupabaseClient();
+    const value = client[prop as keyof typeof client];
+    return typeof value === 'function' ? value.bind(client) : value;
+  }
+});
 
 // Database types
 export interface Database {
